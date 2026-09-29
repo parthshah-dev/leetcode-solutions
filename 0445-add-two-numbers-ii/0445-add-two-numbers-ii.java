@@ -9,18 +9,6 @@
  * }
  */
 class Solution {
-    public ListNode reverse(ListNode head){
-        ListNode curr = head;
-        ListNode prev = null;
-
-        while(curr!=null){
-            ListNode next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
-        }
-        return prev;
-    }
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         if(l1==null){
             return l2;
@@ -43,39 +31,42 @@ class Solution {
         }
 
         int carry = 0;
-        ListNode ansList = new ListNode(-1);
-        ListNode ansHead = ansList;
+        ListNode head = null;
 
         while(!st1.isEmpty() && !st2.isEmpty()){
             int sum = (st1.pop() + st2.pop()) + carry;
             ListNode newNode = new ListNode(sum % 10);
             carry = sum / 10;
-            ansList.next = newNode;
-            ansList = ansList.next;
+            
+            newNode.next = head;
+            head = newNode;
         }
 
         while(!st1.isEmpty()){
             int sum = st1.pop() + carry;
             ListNode newNode = new ListNode(sum % 10);
             carry = sum / 10;
-            ansList.next = newNode;
-            ansList = ansList.next;
+
+            newNode.next = head;
+            head = newNode;
         }
 
         while(!st2.isEmpty()){
             int sum = st2.pop() + carry;
             ListNode newNode = new ListNode(sum % 10);
             carry = sum / 10;
-            ansList.next = newNode;
-            ansList = ansList.next;
+            
+            newNode.next = head;
+            head = newNode;
         }
 
         if(carry!=0){
             ListNode newNode = new ListNode(carry);
-            ansList.next=newNode;
+            
+            newNode.next = head;
+            head = newNode;
         }
 
-        ansHead = reverse(ansHead.next);
-        return ansHead;
+        return head;
     }
 }
