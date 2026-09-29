@@ -16,8 +16,8 @@ class Solution {
         while(curr!=null){
             ListNode next = curr.next;
             curr.next = prev;
-            prev=curr;
-            curr=next;
+            prev = curr;
+            curr = next;
         }
         return prev;
     }
@@ -29,45 +29,45 @@ class Solution {
             return l1;
         }
 
-        l1 = reverse(l1);
-        l2 = reverse(l2);
+        Stack<Integer> st1 = new Stack<>();
+        Stack<Integer> st2 = new Stack<>();
+
+        while(l1!=null){
+            st1.push(l1.val);
+            l1=l1.next;
+        }
+
+        while(l2!=null){
+            st2.push(l2.val);
+            l2=l2.next;
+        }
 
         int carry = 0;
         ListNode ansList = new ListNode(-1);
         ListNode ansHead = ansList;
 
-        ListNode temp1 = l1;
-        ListNode temp2 = l2;
-
-        while(temp1!=null && temp2!=null){
-            int sum = (temp1.val + temp2.val) + carry;
+        while(!st1.isEmpty() && !st2.isEmpty()){
+            int sum = (st1.pop() + st2.pop()) + carry;
             ListNode newNode = new ListNode(sum % 10);
             carry = sum / 10;
             ansList.next = newNode;
             ansList = ansList.next;
-
-            temp1=temp1.next;
-            temp2=temp2.next;
         }
 
-        while(temp1!=null){
-            int sum = temp1.val + carry;
+        while(!st1.isEmpty()){
+            int sum = st1.pop() + carry;
             ListNode newNode = new ListNode(sum % 10);
             carry = sum / 10;
             ansList.next = newNode;
             ansList = ansList.next;
-
-            temp1=temp1.next;
         }
 
-        while(temp2!=null){
-            int sum = temp2.val + carry;
+        while(!st2.isEmpty()){
+            int sum = st2.pop() + carry;
             ListNode newNode = new ListNode(sum % 10);
             carry = sum / 10;
             ansList.next = newNode;
             ansList = ansList.next;
-
-            temp2=temp2.next;
         }
 
         if(carry!=0){
@@ -76,7 +76,6 @@ class Solution {
         }
 
         ansHead = reverse(ansHead.next);
-
         return ansHead;
     }
 }
