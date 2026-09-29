@@ -9,38 +9,46 @@
  * }
  */
 class Solution {
+    public ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+
+        while (curr != null) {
+            ListNode next = curr.next;
+
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+    }
     public ListNode removeNodes(ListNode head) {
-        ArrayList<Integer> arr = new ArrayList<>();
-
-        while(head!=null){
-            arr.add(head.val);
-            head = head.next;
-        }
-
-        Stack<Integer> st = new Stack<>();
-        int[] nextGreater = new int[arr.size()];
-        for(int i=0; i<arr.size(); i++){
-            while(!st.isEmpty() && arr.get(i) > arr.get(st.peek())){
-                nextGreater[st.pop()] = arr.get(i);
-            }
-            st.push(i);
-        }
-
-        //element who does not next greater will be 0
-        //create ans list
-
         ListNode ansList = new ListNode(-1);
         ListNode ansHead = ansList;
 
-        for(int i=0; i<nextGreater.length; i++){
-            if(nextGreater[i] == 0){
-                ListNode newNode = new ListNode(arr.get(i));
-                ansList.next = newNode;
+        Stack<Integer> st = new Stack<>();
+
+        while(head!=null){
+            st.push(head.val);
+            head = head.next;
+        }
+
+        int currMax = st.pop();
+        ansList.next = new ListNode(currMax);
+        ansList = ansList.next;
+
+        while(!st.isEmpty()){
+            int num = st.pop();
+            if(num >= currMax){
+                currMax = num;
+                ansList.next = new ListNode(currMax);
                 ansList = ansList.next;
             }
         }
 
-        return ansHead.next;
+        ansHead = reverse(ansHead.next);
 
+        return ansHead;
     }
 }
